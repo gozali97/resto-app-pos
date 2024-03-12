@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Resources\ProductResource;
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
+
+class DashboardController extends Controller
+{
+    public function index(Request $request)
+    {
+        $products = Product::query()
+            ->with('category')
+            ->when($request->category, fn ($q, $v) => $q->whereBelongsTo(Category::where('category_name', $v)->first()))
+            ->select(
+                'id',
+                'product_name',
+                'stock',
+                'price',
+                'path_image',
+                'category_id'
+            )
+            ->paginate(12)
+            ->withQueryString();
+
+
+        return Inertia::render('Welcome')->with([
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+            'products' => ProductResource::collection($products)
+        ]);
+    }
+}
+

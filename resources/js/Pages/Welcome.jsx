@@ -1,109 +1,49 @@
 import { Link, Head } from '@inertiajs/react';
 import React from "react";
-import {
-    Navbar,
-    Collapse,
-    Button,
-    IconButton,
-    Typography,
-    Input,
-} from "@material-tailwind/react";
-import {
-    RectangleStackIcon,
-    UserCircleIcon,
-    CommandLineIcon,
-    Squares2X2Icon,
-} from "@heroicons/react/24/solid";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import {Carousel} from "@material-tailwind/react";
+import MainLayout from "@/Layouts/MainLayout.jsx";
+import Pagination from "@/Components/Pagination.jsx";
+import ProductItem from "@/Components/ProductItem.jsx";
 
-export default function Welcome({ auth }) {
-
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen((cur) => !cur);
-
-    React.useEffect(() => {
-        window.addEventListener(
-            "resize",
-            () => window.innerWidth >= 960 && setOpen(false),
-        );
-    }, []);
+export default function Welcome(props) {
+    const { data: products, meta, links } = props.products;
 
     return (
-        <>
-            <Head title="Welcome" />
-            <Navbar shadow={false} fullWidth className="border-0">
-                <div className="container mx-auto flex items-center justify-between">
-                    <Typography color="blue-gray" className="text-lg font-bold">
-                        Material Tailwind
-                    </Typography>
-
-                    <div className="hidden items-center gap-4 lg:flex">
-                        {auth.user ? (
-                            <Link
-                                href={route('dashboard')}
-                                className="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"
-                            >
-                                Dashboard
-                            </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href={route('login')}
-                                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-teal-500 text-white hover:bg-teal-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                >
-                                    Log in
-                                </Link>
-
-                                <Link
-                                    href={route('register')}
-                                    className="py-2 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-500 text-white hover:bg-blue-600 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                                >
-                                    Register
-                                </Link>
-                            </>
-                        )}
-                    </div>
+        <MainLayout>
+            <Head title="Menu"/>
+            <div className="py-12">
+                <div className="flex w-full px-6 h-96">
+                    <Carousel className="rounded-xl" loop={true} autoplay={true}>
+                        <img
+                            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="image 1"
+                            className="h-full w-full object-cover"
+                        />
+                        <img
+                            src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="image 2"
+                            className="h-full w-full object-cover"
+                        />
+                        <img
+                            src="https://images.unsplash.com/photo-1577303935007-0d306ee638cf?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                            alt="image 3"
+                            className="h-full w-full object-cover"
+                        />
+                    </Carousel>
                 </div>
-            </Navbar>
-            <header className="bg-white p-8">
-                <div className="grid mt-16 min-h-[82vh] w-full lg:h-[54rem] md:h-[34rem] place-items-stretch bg-[url('/image/bg-hero-17.svg')] bg-center bg-contain bg-no-repeat">
-                    <div className="container mx-auto px-4 text-center">
-                        <Typography className="inline-flex text-xs rounded-lg border-[1.5px] border-blue-gray-50 bg-white py-1 lg:px-4 px-1 font-medium text-primary">
-                            Exciting News! Introducing our latest innovation
-                        </Typography>
-                        <Typography
-                            variant="h1"
-                            color="blue-gray"
-                            className="mx-auto my-6 w-full leading-snug  !text-2xl lg:max-w-3xl lg:!text-5xl"
-                        >
-                            Get ready to experience a new level of{" "}
-                            <span className="text-green-500 leading-snug ">
-                performance
-              </span>{" "}
-                            and{" "}
-                            <span className="leading-snug text-green-500">
-                functionality
-              </span>
-                            .
-                        </Typography>
-                        <Typography
-                            variant="lead"
-                            className="mx-auto w-full !text-gray-500 lg:text-lg text-base"
-                        >
-                            The time is now for it to be okay to be great. For being a bright
-                            color. For standing out.
-                        </Typography>
-                        <div className="mt-8 grid w-full place-items-start md:justify-center">
-                            <div className="mb-2 flex w-full flex-col gap-4 md:flex-row">
-                                <Input color="gray" label="Enter your email" size="lg" />
-                                <Button className="w-full px-4 md:w-[12rem] bg-black">
-                                    get started
-                                </Button>
-                            </div>
+                <div className="flex flex-col w-full py-6 justify-center">
+                    {products.length ? (
+                        <div className="grid px-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {products.map((product) => (
+                                <ProductItem product={product} key={product.id}/>
+                            ))}
                         </div>
+                    ) : null}
+                    <div className="flex justify-center">
+                        <Pagination meta={meta} links={links} />
                     </div>
                 </div>
-            </header>
-        </>
+            </div>
+        </MainLayout>
     );
 }

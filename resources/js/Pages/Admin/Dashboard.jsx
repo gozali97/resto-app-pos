@@ -9,7 +9,7 @@ import {
 } from "@material-tailwind/react";
 import Chart from "react-apexcharts";
 import { Square3Stack3DIcon } from "@heroicons/react/24/outline";
-import AdminLayout from "@/Layouts/AdminLayout.jsx";
+import MainLayout from "@/Layouts/MainLayout.jsx";
 
 export default function Dashboard({ auth }) {
 
@@ -126,7 +126,7 @@ export default function Dashboard({ auth }) {
     };
 
     return (
-        <AdminLayout
+        <MainLayout
             user={auth.user}
         >
             <Head title="Dashboard" />
@@ -185,6 +185,6 @@ export default function Dashboard({ auth }) {
                     </Card>
                 </div>
             </div>
-        </AdminLayout>
+        </MainLayout>
     );
 }
