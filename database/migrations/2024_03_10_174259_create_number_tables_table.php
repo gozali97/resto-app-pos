@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('number')->nullable();
             $table->string('description');
-            $table->integer('status');
+            $table->string('qr_code')->nullable();
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

@@ -15,4 +15,11 @@ class AdminController extends Controller
     {
         return Inertia::render('Admin/Dashboard');
     }
+
+    public function printQr($qr)
+    {
+        $qr_decode = base64_decode($qr);
+
+        return view('print.qr-table-code')->with('qr_code', $qr_decode);
+    }
 }

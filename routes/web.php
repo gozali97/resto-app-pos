@@ -21,23 +21,23 @@ use Inertia\Inertia;
 //    return redirect()->route('admin.login');
 //});
 
-Route::middleware('redirectAdmin')->prefix('admin')->group(function () {
-    Route::get('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'showLoginForm'])->name('admin.login');
-    Route::post('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'login'])->name('admin.login.post');
-    Route::post('/logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'logout'])->name('admin.logout');
-});
-
-
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('admin.dashboard');
-
-    Route::get('/number-table', [\App\Http\Controllers\Admin\NumberTableController::class, 'index'])->name('numberTable.index');
-    Route::get('/number-table/create', [\App\Http\Controllers\Admin\NumberTableController::class, 'create'])->name('numberTable.create');
-    Route::post('/number-table/store', [\App\Http\Controllers\Admin\NumberTableController::class, 'store'])->name('numberTable.store');
-    Route::get('/number-table/edit/{id}', [\App\Http\Controllers\Admin\NumberTableController::class, 'edit'])->name('numberTable.edit');
-    Route::post('/number-table/update/{id}', [\App\Http\Controllers\Admin\NumberTableController::class, 'update'])->name('numberTable.update');
-    Route::get('/number-table/destroy/{id}', [\App\Http\Controllers\Admin\NumberTableController::class, 'destroy'])->name('numberTable.destroy');
-});
+//Route::middleware('redirectAdmin')->prefix('admin')->group(function () {
+//    Route::get('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'showLoginForm'])->name('admin.login');
+//    Route::post('/login', [\App\Http\Controllers\Admin\AdminAuthController::class, 'login'])->name('admin.login.post');
+//    Route::post('/logout', [\App\Http\Controllers\Admin\AdminAuthController::class, 'logout'])->name('admin.logout');
+//});
+//
+//
+//Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+//    Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('admin.dashboard');
+//
+//    Route::get('/number-table-resource', [\App\Http\Controllers\Admin\NumberTableController::class, 'index'])->name('numberTable.index');
+//    Route::get('/number-table-resource/create', [\App\Http\Controllers\Admin\NumberTableController::class, 'create'])->name('numberTable.create');
+//    Route::post('/number-table-resource/store', [\App\Http\Controllers\Admin\NumberTableController::class, 'store'])->name('numberTable.store');
+//    Route::get('/number-table-resource/edit/{id}', [\App\Http\Controllers\Admin\NumberTableController::class, 'edit'])->name('numberTable.edit');
+//    Route::post('/number-table-resource/update/{id}', [\App\Http\Controllers\Admin\NumberTableController::class, 'update'])->name('numberTable.update');
+//    Route::get('/number-table-resource/destroy/{id}', [\App\Http\Controllers\Admin\NumberTableController::class, 'destroy'])->name('numberTable.destroy');
+//});
 //end admin routes
 
 
@@ -60,11 +60,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/product', [\App\Http\Controllers\User\ProductController::class, 'index'])->name('product.index');
-    Route::get('/product', [\App\Http\Controllers\User\ProductController::class, 'index'])->name('product.index');
-    Route::get('/product', [\App\Http\Controllers\User\ProductController::class, 'index'])->name('product.index');
-    Route::get('/product', [\App\Http\Controllers\User\ProductController::class, 'index'])->name('product.index');
-    Route::get('/product', [\App\Http\Controllers\User\ProductController::class, 'index'])->name('product.index');
+    Route::get('/admin/qr-print/{qr}', [\App\Http\Controllers\Admin\AdminController::class, 'printQr'])->name('admin.print-qr');
+
     Route::get('/product', [\App\Http\Controllers\User\ProductController::class, 'index'])->name('product.index');
 });
 
