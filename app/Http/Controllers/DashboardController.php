@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
+use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Foundation\Application;
@@ -12,11 +13,11 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index($number, Request $request)
     {
         $products = Product::query()
             ->with('category')
-            ->when($request->category, fn ($q, $v) => $q->whereBelongsTo(Category::where('category_name', $v)->first()))
+            ->when($request->category, fn($q, $v) => $q->whereBelongsTo(Category::where('slug', $v)->first()))
             ->select(
                 'id',
                 'product_name',
@@ -28,12 +29,11 @@ class DashboardController extends Controller
             ->paginate(12)
             ->withQueryString();
 
+        $carts = Cart::where('table_id', $number)->whereNull('paid_at')->count();
 
-        return Inertia::render('Welcome')->with([
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
-            'laravelVersion' => Application::VERSION,
-            'phpVersion' => PHP_VERSION,
+        return Inertia::render('Home')->with([
+            'numberTable' => $number,
+            'carts' => $carts,
             'products' => ProductResource::collection($products)
         ]);
     }

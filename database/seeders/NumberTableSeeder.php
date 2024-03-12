@@ -22,7 +22,7 @@ class NumberTableSeeder extends Seeder
             NumberTable::create([
                 'number' => $number,
                 'description' => $description,
-                'qr_code' => 'https://127.0.0.1:8000/'.$number,
+                'qr_code' => 'https://127.0.0.1:8000/table/'.$number,
                 'status' => 1
             ]);
         }

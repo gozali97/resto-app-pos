@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -34,6 +36,12 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'categories_global' => Cache::rememberForever('categories_navbar', fn () => Category::query()->get()->map(fn ($q) => [
+                'category_name' => $q->category_name,
+                'slug' => $q->slug,
+                'number' => $q->number,
+                'qr_code' => $q->qr_code,
+            ])),
         ];
     }
 }

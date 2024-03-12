@@ -42,13 +42,19 @@ use Inertia\Inertia;
 
 
 //user routes
-Route::get('/', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return redirect()->route('home', '01');
+});
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/table/{number}', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
+
+
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

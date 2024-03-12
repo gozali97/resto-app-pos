@@ -7,7 +7,7 @@ export default function MainLayout({ user, children }) {
     return (
         <div className="flex-1 h-full py-4 bg-gray-100">
             <GuestNavbar/>
-            <main>{children}</main>
+            <main className="py-10">{children}</main>
         </div>
     );
 }

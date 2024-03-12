@@ -4,7 +4,7 @@ import React from "react";
 import Button from "@/Components/Button.jsx";
 import {toast} from "react-toastify";
 
-export default function ProductItem({ product }) {
+export default function ProductItem({ table, product }) {
     const TruncateText = ({ text, maxLength }) => {
         return text.length > maxLength
             ? text.slice(0, maxLength) + "..."
@@ -17,21 +17,21 @@ export default function ProductItem({ product }) {
                 <img
                     className="peer absolute top-0 right-0 h-full w-full object-cover"
                     src={product.path_image}
-                    alt=""
+                    alt="image1"
                 />
-                <img className="peer absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0 peer-hover:right-0" src="https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Ym9vayUyMGNvdmVyfGVufDB8fDB8fHww" alt="product image" />
+                <img className="peer absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0 peer-hover:right-0" src="https://images.unsplash.com/photo-1577303935007-0d306ee638cf?q=80&w=2880&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="image2" />
                 <svg className="pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white  transition-opacity group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 32 32"><path fill="currentColor" d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z" /></svg>
             </Link>
 
             <div className="mt-4 px-5 pb-5">
                 <Link
                     className="text-sm block mb-2"
-                    href={`/products/${product.id}`}
+                    href={`/products/${product.slug}`}
                 >
                     {<TruncateText text={product.product_name} maxLength={25} />}
                 </Link>
                 <div className="flex items-center justify-between text-sm">
-                    <Link href={`/products?category=${product.category.id}`}>
+                    <Link href={`${table}/?category=${product.category.slug}`}>
                         {product.category.category_name}
                     </Link>
                 </div>

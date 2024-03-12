@@ -14,23 +14,28 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         Category::create([
-            'category_name' => 'Food',
+            'category_name' => $name = 'Food',
+            'slug' => str($name)->slug(),
             'path_image'=> 'category/food.jpg'
         ]);
         Category::create([
-            'category_name' => 'Drinks',
+            'category_name' => $name = 'Drinks',
+            'slug' => str($name)->slug(),
             'path_image'=> 'category/drinks.jpg'
         ]);
         Category::create([
-            'category_name' => 'Cake',
+            'category_name' => $name = 'Cake',
+            'slug' => str($name)->slug(),
             'path_image'=> 'category/cake.jpg'
         ]);
         Category::create([
-            'category_name' => 'Snack',
+            'category_name' => $name = 'Snack',
+            'slug' => str($name)->slug(),
             'path_image'=> 'category/snack.jpg'
         ]);
         Category::create([
-            'category_name' => 'Coffee',
+            'category_name' => $name = 'Coffee',
+            'slug' => str($name)->slug(),
             'path_image'=> 'category/coffee.jpg'
         ]);
     }

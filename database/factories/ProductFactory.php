@@ -21,7 +21,8 @@ class ProductFactory extends Factory
 
         return [
             'category_id' => rand(1, 5),
-            'product_name' => $faker->foodName(),
+            'product_name' => $name = $faker->foodName(),
+            'slug' => str($name)->slug(),
             'price' => rand(10000, 100000),
             'stock' => rand(1, 15),
             'description' => $this->faker->sentence(),
