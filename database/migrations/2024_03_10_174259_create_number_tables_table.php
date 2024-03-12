@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('number_tables', function (Blueprint $table) {
             $table->id();
+            $table->string('number')->nullable();
+            $table->string('description');
+            $table->integer('status');
             $table->timestamps();
         });
     }
