@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductSingleResource;
 use App\Models\Cart;
 use App\Models\Category;
 use App\Models\Product;
@@ -36,6 +37,20 @@ class DashboardController extends Controller
             'numberTable' => $number,
             'carts' => $carts,
             'products' => ProductResource::collection($products)
+        ]);
+    }
+
+    public function show(Request $request, $number, $slug)
+    {
+
+        $product = Product::query()
+            ->with('category')
+            ->where('slug', $slug)
+            ->first();
+
+        return Inertia::render('DetailProduct')->with([
+            'product' => $product,
+            'numberTable' => $number,
         ]);
     }
 }

@@ -13,7 +13,7 @@ export default function ProductItem({ table, product }) {
 
     return (
         <div className="group my-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
-            <Link className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href={`/products/${product.slug}`}>
+            <Link className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href={`/table/${table}/detail/${product.slug}`}>
                 <img
                     className="peer absolute top-0 right-0 h-full w-full object-cover"
                     src={product.path_image}
@@ -26,7 +26,7 @@ export default function ProductItem({ table, product }) {
             <div className="mt-4 px-5 pb-5">
                 <Link
                     className="text-sm block mb-2"
-                    href={`/products/${product.slug}`}
+                    href={`/table/${table}/detail/${product.slug}`}
                 >
                     {<TruncateText text={product.product_name} maxLength={25} />}
                 </Link>

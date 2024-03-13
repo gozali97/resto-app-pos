@@ -47,7 +47,7 @@ Route::get('/', function () {
 });
 
 Route::get('/table/{number}', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
-
+Route::get('/table/{number}/detail/{product:slug}', [\App\Http\Controllers\DashboardController::class, 'show'])->name('product.detail');
 
 
 Route::middleware('auth')->group(function () {
