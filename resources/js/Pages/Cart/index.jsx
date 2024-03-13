@@ -10,7 +10,6 @@ import Toastfy from "@/Components/Toastfy.jsx";
 import Container from "@/Components/Container.jsx";
 import Card from "@/Components/Card.jsx";
 import Table from "@/Components/Table.jsx";
-import {Menu, Transition} from "@headlessui/react";
 import {ChevronDownIcon, CreditCardIcon, LockClosedIcon} from "@heroicons/react/24/solid";
 import {
     CardBody,
@@ -36,6 +35,26 @@ export default function Index(props) {
             toast.error("An error occurred while deleting the item.");
         }
     };
+    const addProduct = async (cart_id) => {
+        try {
+            router.post(route('carts.addProduct', cart_id));
+            toast.success("Successfully added quantity product!");
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred while deleting the item.");
+        }
+    }
+
+    const reduceProduct = async (cart_id) => {
+        try {
+            router.post(route('carts.reduceProduct', cart_id));
+            toast.success("Successfully reduce quantity product!");
+        } catch (error) {
+            console.error(error);
+            toast.error("An error occurred while deleting the item.");
+        }
+    }
+
     let subtotal = carts.reduce((acc, cart) => acc + cart.price, 0);
     let ppn = (11 / 100) * carts.reduce((acc, cart) => acc + cart.price, 0);
     let total = carts.reduce((acc, cart) => acc + cart.price_tax, 0);
@@ -84,15 +103,20 @@ export default function Index(props) {
                                                     className="text-start">{cart.category.category_name}
                                                 </Table.Td>
                                                 <Table.Td
-                                                    className="text-start">{cart.quantity}
+                                                    className="text-start">
+                                                    <div className="flex items-center">
+                                                        <button onClick={() => reduceProduct(cart.id)} className="border rounded-md py-2 font-bold px-4 mr-2 text-white bg-red-500 hover:bg-red-600">-</button>
+                                                        <span className="text-center w-8">{cart.quantity}</span>
+                                                        <button onClick={() => addProduct(cart.id)} className="border rounded-md py-2 font-bold px-4 ml-2 text-white bg-green-500 hover:bg-green-600">+</button>
+                                                    </div>
                                                 </Table.Td>
                                                 <Table.Td
                                                     className="text-right">Rp. {numberFormat(cart.price)}
                                                 </Table.Td>
                                                 <Table.Td className="text-right">
-                                                    <Button onClick={() => onDeleteHandler(cart.id)}
+                                                <Button onClick={() => onDeleteHandler(cart.id)}
                                                             className="focus:outline-none inline">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewB
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewB
                                                              ox="0 0 24 24"
                                                              strokeWidth={1.5} stroke="currentColor"
                                                              className="w-6 h-6 text-red-600">

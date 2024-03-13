@@ -64,4 +64,38 @@ class CartController extends Controller
 
         return redirect()->back();
     }
+
+    public function addProduct($id)
+    {
+        $cart = Cart::findOrFail($id);
+
+        $product = Product::query()->where('id', $cart->product_id)->first();
+
+        $cart->price = $cart->price + $product->price;
+        $cart->quantity = $cart->quantity + 1;
+
+        if($cart->save()){
+            return redirect()->back();
+        }
+    }
+
+
+    public function removeProduct($id)
+    {
+        $cart = Cart::findOrFail($id);
+
+        $product = Product::query()->where('id', $cart->product_id)->first();
+
+        $cart->price = $cart->price - $product->price;
+        $cart->quantity = $cart->quantity - 1;
+
+        if($cart->save()){
+            if($cart->quantity == 0){
+                $cart->delete();
+            }
+
+            return redirect()->back();
+        }
+
+    }
 }

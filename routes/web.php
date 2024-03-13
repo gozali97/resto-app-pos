@@ -53,6 +53,9 @@ Route::get('carts/{number}', [\App\Http\Controllers\CartController::class, 'inde
 Route::post('carts/add-to-cart/{number}/{product:slug}', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
 Route::delete('carts/delete/{id}', [\App\Http\Controllers\CartController::class, 'destroy'])->name('carts.destroy');
 
+Route::post('carts/addProduct/{id}', [\App\Http\Controllers\CartController::class, 'addProduct'])->name('carts.addProduct');
+Route::post('carts/deleteProduct/{id}', [\App\Http\Controllers\CartController::class, 'removeProduct'])->name('carts.reduceProduct');
+
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
