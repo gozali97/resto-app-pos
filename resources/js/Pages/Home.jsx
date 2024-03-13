@@ -7,6 +7,7 @@ import ProductItem from "@/Components/ProductItem.jsx";
 import {ShoppingBagIcon} from "@heroicons/react/24/solid/index.js";
 import GuestNavbar from "@/Components/GuestNavbar.jsx";
 import Cart from "@/Components/Cart.jsx";
+import Toastfy from "@/Components/Toastfy.jsx";
 
 export default function Home(props) {
     const { data: products, meta, links } = props.products;
@@ -15,6 +16,7 @@ export default function Home(props) {
 
     return (
         <MainLayout>
+            <Toastfy/>
             <Head title="Menu"/>
             <GuestNavbar table={numberTable}/>
             <div className="py-20">

@@ -11,9 +11,18 @@ import Container from "@/Components/Container.jsx";
 import Card from "@/Components/Card.jsx";
 import Table from "@/Components/Table.jsx";
 import {Menu, Transition} from "@headlessui/react";
-import {ChevronDownIcon} from "@heroicons/react/24/solid";
-import {CardFooter} from "@material-tailwind/react";
-
+import {ChevronDownIcon, CreditCardIcon, LockClosedIcon} from "@heroicons/react/24/solid";
+import {
+    CardBody,
+    CardFooter,
+    CardHeader, Input,
+    Tab,
+    TabPanel,
+    Tabs,
+    TabsBody,
+    TabsHeader,
+    Typography
+} from "@material-tailwind/react";
 export default function Index(props) {
     const numberTable = props.numberTable;
     const carts = props.carts;
@@ -31,141 +40,311 @@ export default function Index(props) {
     let ppn = (11 / 100) * carts.reduce((acc, cart) => acc + cart.price, 0);
     let total = carts.reduce((acc, cart) => acc + cart.price_tax, 0);
 
+    const [type, setType] = React.useState("cash");
+    const [cardNumber, setCardNumber] = React.useState("");
+    const [cardExpires, setCardExpires] = React.useState("");
+    const [paymentValue, setpaymentValue] = React.useState("");
+    const [changeValue, setchangeValue] = React.useState("");
+
 
     return (<MainLayout>
         <Toastfy/>
         <Head title="Your Cart"/>
         <GuestNavbar table={numberTable}/>
         <div className="py-28">
-            <Container>
-                <Card>
-                    <Card.Header>Your Cart</Card.Header>
-                    <Card.Table>
-                        <Table>
-                            <Table.Thead>
-                                <tr>
-                                    <Table.Th>#</Table.Th>
-                                    <Table.Th>Name</Table.Th>
-                                    <Table.Th>Quantity</Table.Th>
-                                    <Table.Th className="text-right">Price</Table.Th>
-                                    <Table.Th></Table.Th>
-                                </tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                                {carts.length ? <>
-                                    {carts.map((cart, i) => (<tr key={cart.id}>
-                                        <Table.Td>{i + 1}</Table.Td>
-                                        <Table.Td>
-                                            <Link href={`/table/${numberTable}/detail/${cart.product.slug}`}>
-                                                {cart.product.product_name}
-                                            </Link>
-                                        </Table.Td>
-                                        <Table.Td
-                                            className="text-start">{cart.quantity}
-                                        </Table.Td>
-                                        <Table.Td
-                                            className="text-right">Rp. {numberFormat(cart.price)}
-                                        </Table.Td>
-                                        <Table.Td className="text-right">
-                                            <Button onClick={() => onDeleteHandler(cart.id)}
-                                                    className="focus:outline-none inline">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewB
-                                                     ox="0 0 24 24"
-                                                     strokeWidth={1.5} stroke="currentColor"
-                                                     className="w-6 h-6 text-red-600">
-                                                    <path strokeLinecap="round" strokeLinejoin="round"
-                                                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
-                                                </svg>
-                                            </Button>
-                                        </Table.Td>
-                                    </tr>))}
-                                    <tr>
-                                        <Table.Td></Table.Td>
-                                        <Table.Td></Table.Td>
-                                        <Table.Td>PPN 11%</Table.Td>
-                                        <Table.Td className="text-right">RP. {numberFormat(ppn)}</Table.Td>
-                                    </tr>
-                                    <tr>
-                                        <Table.Td></Table.Td>
-                                        <Table.Td></Table.Td>
-                                        <Table.Td>Subtotal</Table.Td>
-                                        <Table.Td className="text-right">RP. {numberFormat(subtotal)}</Table.Td>
-                                    </tr>
-                                    <tr className='bg-gray-200 text-gray-900 font-bold'>
-                                        <Table.Td></Table.Td>
-                                        <Table.Td></Table.Td>
-                                        <Table.Td>Total</Table.Td>
-                                        <Table.Td className="text-right">RP. {numberFormat(total)}</Table.Td>
-                                        <Table.Td></Table.Td>
-                                    </tr>
-                                </> : <Table.Empty colSpan={4} message={<>
-                                    The Cart is currently empty
-                                    <br/>
-                                    <br/>
-                                    <Link href={`/table/${numberTable}`} className="bg-green-500 text-white p-2 mt-5 rounded">Try
-                                        add new one</Link>
-                                </>}/>}
-                            </Table.Tbody>
-                        </Table>
-                    </Card.Table>
-                </Card>
-                <CardFooter className="-mt-6">
-                    {carts.length > 0 ? <>
-                        <div className='mt-4 flex justify-end'>
-                            <Menu as="div" className="relative z-99 inline-block text-left">
-                                <div>
-                                    <Menu.Button
-                                        className="inline-flex w-full justify-center text-sm font-medium hover:bg-blue-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 bg-blue-600 text-white px-3 py-2 rounded-lg">
-                                        Metode pembayaran
-                                        <ChevronDownIcon
-                                            className="-mr-1 ml-2 h-5 w-5 text-violet-200 hover:text-violet-100"
-                                            aria-hidden="true"
-                                        />
-                                    </Menu.Button>
-                                </div>
-                                <Transition
-                                    enter="transition ease-out duration-100"
-                                    enterFrom="transform opacity-0 scale-95"
-                                    enterTo="transform opacity-100 scale-100"
-                                    leave="transition ease-in duration-75"
-                                    leaveFrom="transform opacity-100 scale-100"
-                                    leaveTo="transform opacity-0 scale-95"
-                                >
-                                    <Menu.Items
-                                        className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                                        <div className="px-1 py-1 ">
-                                            <Menu.Item>
-                                                <Link
-                                                    className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-gray-100">
-                                                    Gopay
-                                                </Link>
-                                            </Menu.Item>
-                                            <Menu.Item>
-                                                <Link
-                                                    className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-gray-100">
-                                                    BCA Virtual Account
-                                                </Link>
-                                            </Menu.Item>
-                                            <Menu.Item>
-                                                <Link
-                                                    className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-gray-100">
-                                                    BNI Virtual Account
-                                                </Link>
-                                            </Menu.Item>
-                                            <Menu.Item>
-                                                <Link
-                                                    className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-gray-100">
-                                                    Mandiri Virtual Account
-                                                </Link>
-                                            </Menu.Item>
-                                        </div>
-                                    </Menu.Items>
-                                </Transition>
-                            </Menu>
-                        </div>
+            <div className={`grid gap-4 px-4 ${carts.length ? ' grid-cols-3' : ''}`}>
+                <div className="col-span-2">
+                    <Container>
+                        <Card>
+                            <Card.Header>Your Cart</Card.Header>
+                            <Card.Table>
+                                <Table>
+                                    <Table.Thead>
+                                        <tr>
+                                            <Table.Th>#</Table.Th>
+                                            <Table.Th>Name</Table.Th>
+                                            <Table.Th>Category</Table.Th>
+                                            <Table.Th>Quantity</Table.Th>
+                                            <Table.Th className="text-right">Price</Table.Th>
+                                            <Table.Th></Table.Th>
+                                        </tr>
+                                    </Table.Thead>
+                                    <Table.Tbody>
+                                        {carts.length ? <>
+                                            {carts.map((cart, i) => (<tr key={cart.id}>
+                                                <Table.Td>{i + 1}</Table.Td>
+                                                <Table.Td>
+                                                    <Link href={`/table/${numberTable}/detail/${cart.product.slug}`}>
+                                                        {cart.product.product_name}
+                                                    </Link>
+                                                </Table.Td>
+                                                <Table.Td
+                                                    className="text-start">{cart.category.category_name}
+                                                </Table.Td>
+                                                <Table.Td
+                                                    className="text-start">{cart.quantity}
+                                                </Table.Td>
+                                                <Table.Td
+                                                    className="text-right">Rp. {numberFormat(cart.price)}
+                                                </Table.Td>
+                                                <Table.Td className="text-right">
+                                                    <Button onClick={() => onDeleteHandler(cart.id)}
+                                                            className="focus:outline-none inline">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewB
+                                                             ox="0 0 24 24"
+                                                             strokeWidth={1.5} stroke="currentColor"
+                                                             className="w-6 h-6 text-red-600">
+                                                            <path strokeLinecap="round" strokeLinejoin="round"
+                                                                  d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"/>
+                                                        </svg>
+                                                    </Button>
+                                                </Table.Td>
+                                            </tr>))}
+                                            <tr>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td>PPN 11%</Table.Td>
+                                                <Table.Td className="text-right">RP. {numberFormat(ppn)}</Table.Td>
+                                            </tr>
+                                            <tr>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td>Subtotal</Table.Td>
+                                                <Table.Td className="text-right">RP. {numberFormat(subtotal)}</Table.Td>
+                                            </tr>
+                                            <tr className='bg-gray-200 text-gray-900 font-bold'>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td></Table.Td>
+                                                <Table.Td>Total</Table.Td>
+                                                <Table.Td className="text-right">RP. {numberFormat(total)}</Table.Td>
+                                                <Table.Td></Table.Td>
+                                            </tr>
+                                        </> : <Table.Empty colSpan={5} message={<>
+                                            The Cart is currently empty
+                                            <br/>
+                                            <br/>
+                                            <Link href={`/table/${numberTable}`}
+                                                  className="bg-green-500 text-white p-2 mt-5 rounded">Try
+                                                add new one</Link>
+                                        </>}/>}
+                                    </Table.Tbody>
+                                </Table>
+                            </Card.Table>
+                        </Card>
+                    </Container>
+                </div>
+                <div>
+                    {carts.length ? <>
+                        <Card className="w-full max-w-[24rem]">
+                            <CardHeader
+                                color="gray"
+                                floated={false}
+                                shadow={false}
+                                className="m-0 grid place-items-center px-4 py-8 text-center"
+                            >
+                                <Typography variant="h5" color="white">
+                                    {type === "card" ? "Pay with Card" : "Pay with Cash"}
+                                </Typography>
+                            </CardHeader>
+                            <CardBody>
+                                <form action="">
+                                    <Tabs value={type} className="overflow-visible">
+                                        <TabsHeader className="relative z-0 ">
+                                            <Tab value="cash" onClick={() => setType("cash")}>
+                                                Pay with Cash
+                                            </Tab>
+                                            <Tab value="card" onClick={() => setType("card")}>
+                                                Pay with Card
+                                            </Tab>
+                                        </TabsHeader>
+                                        <TabsBody
+                                            className="!overflow-x-hidden !overflow-y-visible"
+                                            animate={{
+                                                initial: {
+                                                    x: type === "card" ? 400 : -400,
+                                                },
+                                                mount: {
+                                                    x: 0,
+                                                },
+                                                unmount: {
+                                                    x: type === "card" ? 400 : -400,
+                                                },
+                                            }}
+                                        >
+                                            <TabPanel value="card" className="p-0">
+                                                <div className="mt-12 flex flex-col gap-4">
+                                                    <div className="my-3">
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mb-2 font-medium "
+                                                        >
+                                                            Card Details
+                                                        </Typography>
+
+                                                        <Input
+                                                            maxLength={19}
+                                                            value={cardNumber}
+                                                            onChange={(event) => setCardNumber(event.target.value)}
+                                                            icon={
+                                                                <CreditCardIcon
+                                                                    className="absolute left-0 h-4 w-4 text-blue-gray-300"/>
+                                                            }
+                                                            placeholder="0000 0000 0000 0000"
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                        />
+                                                        <div className="my-4 flex items-center gap-4">
+                                                            <div>
+                                                                <Typography
+                                                                    variant="small"
+                                                                    color="blue-gray"
+                                                                    className="mb-2 font-medium"
+                                                                >
+                                                                    Expires
+                                                                </Typography>
+                                                                <Input
+                                                                    maxLength={5}
+                                                                    value={cardExpires}
+                                                                    onChange={(event) => setCardExpires(event.target.value)}
+                                                                    containerProps={{className: "min-w-[72px]"}}
+                                                                    placeholder="00/00"
+                                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                                    labelProps={{
+                                                                        className: "before:content-none after:content-none",
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <Typography
+                                                                    variant="small"
+                                                                    color="blue-gray"
+                                                                    className="mb-2 font-medium"
+                                                                >
+                                                                    CVC
+                                                                </Typography>
+                                                                <Input
+                                                                    maxLength={4}
+                                                                    containerProps={{className: "min-w-[72px]"}}
+                                                                    placeholder="000"
+                                                                    className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                                    labelProps={{
+                                                                        className: "before:content-none after:content-none",
+                                                                    }}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mb-2 font-medium"
+                                                        >
+                                                            Holder Name
+                                                        </Typography>
+                                                        <Input
+                                                            placeholder="name@mail.com"
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mb-2 font-medium"
+                                                        >
+                                                            Payment Value
+                                                        </Typography>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Rp.0"
+                                                            value={paymentValue}
+                                                            onChange={(event) => setpaymentValue(event.target.value)}
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <Button size="lg">Pay Now</Button>
+                                                    <Typography
+                                                        variant="small"
+                                                        color="gray"
+                                                        className="mt-2 flex items-center justify-center gap-2 font-medium opacity-60"
+                                                    >
+                                                        <LockClosedIcon className="-mt-0.5 h-4 w-4"/> Payments are
+                                                        secure and encrypted
+                                                    </Typography>
+                                                </div>
+                                            </TabPanel>
+                                            <TabPanel value="cash" className="p-0">
+                                                <div className="mt-12 flex flex-col gap-4">
+                                                    <div>
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mb-2 font-medium"
+                                                        >
+                                                            Payment Value
+                                                        </Typography>
+                                                        <Input
+                                                            type="text"
+                                                            placeholder="Rp.0"
+                                                            value={paymentValue}
+                                                            onChange={(event) => setpaymentValue(event.target.value)}
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="my-2">
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mt-2 -mb-2 font-medium"
+                                                            value={changeValue}
+                                                            onChange={(event) => setchangeValue(event.target.value)}
+                                                        >
+                                                            Change Value
+                                                        </Typography>
+                                                        <Input
+                                                            placeholder="Rp.0"
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                            containerProps={{className: "mt-4"}}
+                                                        />
+                                                    </div>
+                                                    <Button size="lg">Pay Now</Button>
+                                                    <Typography
+                                                        variant="small"
+                                                        color="gray"
+                                                        className="flex items-center justify-center gap-2 font-medium opacity-60"
+                                                    >
+                                                        <LockClosedIcon className="-mt-0.5 h-4 w-4"/> Payments are
+                                                        secure and encrypted
+                                                    </Typography>
+                                                </div>
+                                            </TabPanel>
+                                        </TabsBody>
+                                    </Tabs>
+                                </form>
+                            </CardBody>
+                        </Card>
                     </> : null}
-                </CardFooter>
-            </Container>
+
+                </div>
+            </div>
+
         </div>
     </MainLayout>);
 }

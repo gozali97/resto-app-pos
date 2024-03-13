@@ -11,6 +11,16 @@ export default function ProductItem({ table, product }) {
             : text;
     };
 
+    const addToCart = async () => {
+        try {
+            router.post(route("cart.store", [table, product]));
+            toast.success("Success add to cart "+product.product_name +" !");
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed add to cart!");
+        }
+    };
+
     return (
         <div className="group my-10 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
             <Link className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl" href={`/table/${table}/detail/${product.slug}`}>
@@ -39,6 +49,9 @@ export default function ProductItem({ table, product }) {
                     <p>
                         <span className="text-3xl font-bold text-slate-900">RP.{numberFormat(product.price)}</span>
                     </p>
+                    <div className="mt-2">
+                        <Button className={`py-1.5 mb-1 text-sm bg-green-500 hover:bg-green-600`} onClick={addToCart}>Add to Cart</Button>
+                    </div>
                 </div>
 
             </div>

@@ -87,7 +87,7 @@ export default function DetailProduct(props) {
                                     {numberFormat(product.price)}
                                 </div>
                                 <div className="mt-2">
-                                <Button onClick={addToCart}>Add to Cart</Button>
+                                <Button className={`py-2 mb-1 text-sm bg-green-500 hover:bg-green-600`} onClick={addToCart}>Add to Cart</Button>
                                 </div>
                             </div>
 
