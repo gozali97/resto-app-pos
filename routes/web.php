@@ -49,6 +49,7 @@ Route::get('/', function () {
 Route::get('/table/{number}', [\App\Http\Controllers\DashboardController::class, 'index'])->name('home');
 Route::get('/table/{number}/detail/{product:slug}', [\App\Http\Controllers\DashboardController::class, 'show'])->name('product.detail');
 
+Route::post('carts/add-to-cart/{number}/{product:slug}', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', function () {

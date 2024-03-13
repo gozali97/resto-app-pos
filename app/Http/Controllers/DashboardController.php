@@ -48,9 +48,12 @@ class DashboardController extends Controller
             ->where('slug', $slug)
             ->first();
 
+        $carts = Cart::where('table_id', $number)->whereNull('paid_at')->count();
+
         return Inertia::render('DetailProduct')->with([
             'product' => $product,
             'numberTable' => $number,
+            'carts' => $carts
         ]);
     }
 }

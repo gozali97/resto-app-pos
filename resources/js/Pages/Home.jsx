@@ -6,6 +6,7 @@ import Pagination from "@/Components/Pagination.jsx";
 import ProductItem from "@/Components/ProductItem.jsx";
 import {ShoppingBagIcon} from "@heroicons/react/24/solid/index.js";
 import GuestNavbar from "@/Components/GuestNavbar.jsx";
+import Cart from "@/Components/Cart.jsx";
 
 export default function Home(props) {
     const { data: products, meta, links } = props.products;
@@ -48,18 +49,7 @@ export default function Home(props) {
                         <Pagination meta={meta} links={links}/>
                     </div>
                 </div>
-                <div className="fixed bottom-4 right-4">
-                    <Typography as="a" href="#" className="mr-2 ml-2 cursor-pointer py-1.5 font-medium ">
-                        <Link href="/cart">
-                            <div className="relative inline-flex">
-                                <ShoppingBagIcon className="h-10 w-10 text-blue-500 hover:text-blue-600 rounded-lg"/>
-                                <div
-                                    className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{carts}
-                                </div>
-                            </div>
-                        </Link>
-                    </Typography>
-                </div>
+                <Cart carts={carts}/>
             </div>
         </MainLayout>
     );

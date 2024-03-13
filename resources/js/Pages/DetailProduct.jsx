@@ -2,29 +2,32 @@ import {Link, Head, router} from '@inertiajs/react';
 import React from "react";
 import MainLayout from "@/Layouts/MainLayout.jsx";
 import GuestNavbar from "@/Components/GuestNavbar.jsx";
-import Container from "@/Components/Container.jsx";
 import {numberFormat} from "@/Libs/Helpers.jsx";
 import Button from "@/Components/Button.jsx";
-import { ToastContainer, toast } from 'react-toastify';
+import {toast, ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {Carousel} from "@material-tailwind/react";
+import Cart from "@/Components/Cart.jsx";
+import Toastfy from "@/Components/Toastfy.jsx";
 
 export default function DetailProduct(props) {
     const product = props.product;
     const numberTable = props.numberTable;
-    // const carts = props.carts;
+    const carts = props.carts;
 
     const addToCart = async () => {
         try {
-            router.post(route("cart.store", product));
-            toast.success("Success add to cart!");
+            router.post(route("cart.store", [numberTable, product]));
+            toast.success("Success add to cart "+product.product_name +" !");
         } catch (error) {
             console.error(error);
-            toast.error("Gagal menambahkan ke keranjang!");
+            toast.error("Failed add to cart!");
         }
     };
 
     return (
         <MainLayout>
+            <Toastfy />
             <Head title="Detail Product"/>
             <GuestNavbar table={numberTable}/>
             <div className="py-20">
@@ -92,6 +95,7 @@ export default function DetailProduct(props) {
                         </div>
                     </div>
                 </div>
+                <Cart carts={carts}/>
             </div>
         </MainLayout>
     );
