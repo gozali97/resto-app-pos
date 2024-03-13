@@ -95,7 +95,7 @@ export default function DetailProduct(props) {
                         </div>
                     </div>
                 </div>
-                <Cart carts={carts}/>
+                <Cart carts={carts} numberTable={numberTable}/>
             </div>
         </MainLayout>
     );

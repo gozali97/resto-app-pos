@@ -2,26 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
+use App\Models\NumberTable;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request,$number)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $carts = Cart::query()
+            ->with(['product', 'table'])
+            ->where('table_id', $number)
+            ->whereNull('paid_at')
+            ->get();
+//        return CartResource::collection($carts);
+        return Inertia::render('Cart/index')->with([
+            'carts' => CartResource::collection($carts)->toArray($request),
+            'numberTable' => $number,
+        ]);
     }
 
     /**
@@ -29,11 +33,16 @@ class CartController extends Controller
      */
     public function store(Request $request, $number, Product $product)
     {
-        $cart = Cart::query()->where('table_id', $number)->where('product_id', $product->id)->first();
+        $cart = Cart::query()
+            ->where('table_id', $number)
+            ->where('product_id', $product->id)
+            ->first();
+
+        $table = NumberTable::query()->where('number', $number)->first();
 
         if(!$cart){
             Cart::create([
-                'table_id' => $number,
+                'table_id' => $table->id,
                 'product_id' => $product->id,
                 'price' => $product->price,
                 'quantity' => 1,
@@ -47,36 +56,12 @@ class CartController extends Controller
 
         return redirect()->back();
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $cart = Cart::findOrFail($id);
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+        $cart->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->back();
     }
 }

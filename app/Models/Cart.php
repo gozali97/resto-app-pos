@@ -13,4 +13,8 @@ class Cart extends Model
     public  function product(){
         return $this->belongsTo(Product::class);
     }
+
+    public function table(){
+     return $this->belongsTo(NumberTable::class);
+    }
 }

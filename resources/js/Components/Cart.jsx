@@ -6,11 +6,11 @@ import {toast} from "react-toastify";
 import {Typography} from "@material-tailwind/react";
 import {ShoppingBagIcon} from "@heroicons/react/24/solid/index.js";
 
-export default function Cart({ carts}) {
+export default function Cart({ carts, numberTable }) {
     return (
         <div className="fixed bottom-4 right-4">
             <Typography as="a" href="#" className="mr-2 ml-2 cursor-pointer py-1.5 font-medium ">
-                <Link href="/cart">
+                <Link href={`/carts/${numberTable}`}>
                     <div className="relative inline-flex">
                         <ShoppingBagIcon className="h-10 w-10 text-blue-500 hover:text-blue-600 rounded-lg"/>
                         <div

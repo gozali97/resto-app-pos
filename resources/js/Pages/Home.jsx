@@ -49,7 +49,7 @@ export default function Home(props) {
                         <Pagination meta={meta} links={links}/>
                     </div>
                 </div>
-                <Cart carts={carts}/>
+                <Cart carts={carts} numberTable={numberTable}/>
             </div>
         </MainLayout>
     );
