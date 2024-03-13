@@ -39,8 +39,6 @@ class HandleInertiaRequests extends Middleware
             'categories_global' => Cache::rememberForever('categories_navbar', fn () => Category::query()->get()->map(fn ($q) => [
                 'category_name' => $q->category_name,
                 'slug' => $q->slug,
-                'number' => $q->number,
-                'qr_code' => $q->qr_code,
             ])),
         ];
     }

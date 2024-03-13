@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('stock');
             $table->string('description')->nullable();
-            $table->integer('status');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

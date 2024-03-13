@@ -67,6 +67,7 @@ class ProductResource extends Resource
                 ->searchable(),
                 Tables\Columns\ImageColumn::make('path_image')
                 ->searchable(),
+                Tables\Columns\ToggleColumn::make('status'),
             ])->defaultSort('id', 'desc')
             ->filters([
                 //

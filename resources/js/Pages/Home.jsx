@@ -5,6 +5,7 @@ import MainLayout from "@/Layouts/MainLayout.jsx";
 import Pagination from "@/Components/Pagination.jsx";
 import ProductItem from "@/Components/ProductItem.jsx";
 import {ShoppingBagIcon} from "@heroicons/react/24/solid/index.js";
+import GuestNavbar from "@/Components/GuestNavbar.jsx";
 
 export default function Home(props) {
     const { data: products, meta, links } = props.products;
@@ -14,7 +15,8 @@ export default function Home(props) {
     return (
         <MainLayout>
             <Head title="Menu"/>
-            <div className="py-12">
+            <GuestNavbar table={numberTable}/>
+            <div className="py-20">
                 <div className="flex w-full px-10 h-72 lg:h-96">
                     <Carousel className="rounded-xl" loop={true} autoplay={true}>
                         <img

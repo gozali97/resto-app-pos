@@ -21,6 +21,7 @@ class DashboardController extends Controller
             ->select(
                 'id',
                 'product_name',
+                'slug',
                 'stock',
                 'price',
                 'path_image',

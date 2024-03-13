@@ -13,7 +13,7 @@ import {
 import {Link, usePage} from "@inertiajs/react";
 // nav list component
 
-function NavList() {
+function NavList({numberTable}) {
     const { categories_global } = usePage().props;
 
     return (
@@ -24,7 +24,7 @@ function NavList() {
                 color="gray"
                 className="font-medium text-blue-gray-500"
             >
-                <Link href="/">
+                <Link href={`/table/${numberTable}`}>
                     <MenuItem className="flex items-center gap-2 lg:rounded-full">
                         <span className="text-gray-900">Dashboard</span>
                     </MenuItem>
@@ -39,10 +39,10 @@ function NavList() {
                     color="gray"
                     className="font-medium text-blue-gray-500"
                 >
-                    <Link href={`/${category.slug}/?category=${category.slug}`}>
+                    <Link href={`/table/${numberTable}/?category=${category.slug}`}>
                         <MenuItem className="flex items-center gap-2 lg:rounded-full">
                             <span className="text-gray-900"> {category.category_name}</span>
-                            {category.number}
+
                         </MenuItem>
                     </Link>
                 </Typography>
@@ -51,7 +51,7 @@ function NavList() {
     );
 }
 
-export function GuestNavbar() {
+export function GuestNavbar({table}) {
     const [isNavOpen, setIsNavOpen] = React.useState(false);
 
     const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
@@ -75,7 +75,7 @@ export function GuestNavbar() {
                 </Typography>
                 <div className="relative lg:mx-auto flex items-center justify-center text-blue-gray-900">
                     <div className="hidden lg:flex">
-                        <NavList/>
+                        <NavList numberTable={table}/>
                     </div>
 
                     {/*<ProfileMenu />*/}
@@ -94,7 +94,7 @@ export function GuestNavbar() {
 
             </div>
             <MobileNav open={isNavOpen} className="overflow-scroll">
-                <NavList/>
+                <NavList numberTable={table}/>
             </MobileNav>
         </Navbar>
     );
