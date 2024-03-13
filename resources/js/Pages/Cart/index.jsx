@@ -44,7 +44,9 @@ export default function Index(props) {
     const [cardNumber, setCardNumber] = React.useState("");
     const [cardExpires, setCardExpires] = React.useState("");
     const [paymentValue, setpaymentValue] = React.useState("");
-    const [changeValue, setchangeValue] = React.useState("");
+
+    const isPaymentValueSufficient = parseFloat(paymentValue) >= total;
+    const changeValue = paymentValue ? parseFloat(paymentValue) - total : 0;
 
 
     return (<MainLayout>
@@ -52,8 +54,8 @@ export default function Index(props) {
         <Head title="Your Cart"/>
         <GuestNavbar table={numberTable}/>
         <div className="py-28">
-            <div className={`grid gap-4 px-4 ${carts.length ? ' grid-cols-3' : ''}`}>
-                <div className="col-span-2">
+            <div className={`grid gap-4 px-4 ${carts.length ? ' lg:grid-cols-3' : ''}`}>
+                <div className="lg:col-span-2 -mt-6 max-w-96 lg:max-w-full overflow-x-auto">
                     <Container>
                         <Card>
                             <Card.Header>Your Cart</Card.Header>
@@ -136,14 +138,14 @@ export default function Index(props) {
                         </Card>
                     </Container>
                 </div>
-                <div>
+                <div className="px-4">
                     {carts.length ? <>
                         <Card className="w-full max-w-[24rem]">
                             <CardHeader
                                 color="gray"
                                 floated={false}
                                 shadow={false}
-                                className="m-0 grid place-items-center px-4 py-8 text-center"
+                                className="m-0 grid place-items-center px-4 py-6 text-center"
                             >
                                 <Typography variant="h5" color="white">
                                     {type === "card" ? "Pay with Card" : "Pay with Cash"}
@@ -273,7 +275,9 @@ export default function Index(props) {
                                                             }}
                                                         />
                                                     </div>
-                                                    <Button size="lg">Pay Now</Button>
+                                                    <Button size="lg" disabled={!isPaymentValueSufficient} className={`text-white ${isPaymentValueSufficient ? 'bg-blue-600 hover:bg-blue-700':'bg-red-500'}`}>
+                                                        Pay Now
+                                                    </Button>
                                                     <Typography
                                                         variant="small"
                                                         color="gray"
@@ -310,21 +314,23 @@ export default function Index(props) {
                                                             variant="small"
                                                             color="blue-gray"
                                                             className="mt-2 -mb-2 font-medium"
-                                                            value={changeValue}
-                                                            onChange={(event) => setchangeValue(event.target.value)}
                                                         >
                                                             Change Value
                                                         </Typography>
                                                         <Input
                                                             placeholder="Rp.0"
+                                                            value={changeValue}
+                                                            disabled
                                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                             labelProps={{
                                                                 className: "before:content-none after:content-none",
                                                             }}
-                                                            containerProps={{className: "mt-4"}}
+                                                            containerProps={{ className: "mt-4" }}
                                                         />
                                                     </div>
-                                                    <Button size="lg">Pay Now</Button>
+                                                    <Button size="lg" disabled={!isPaymentValueSufficient} className={`text-white ${isPaymentValueSufficient ? 'bg-blue-600 hover:bg-blue-700':'bg-red-500'}`}>
+                                                        Pay Now
+                                                    </Button>
                                                     <Typography
                                                         variant="small"
                                                         color="gray"
