@@ -33,6 +33,7 @@ class CartController extends Controller
      */
     public function store(Request $request, $number, Product $product)
     {
+
         $cart = Cart::query()
             ->where('table_id', $number)
             ->where('product_id', $product->id)
@@ -54,7 +55,11 @@ class CartController extends Controller
             $cart->save();
         }
 
-        return redirect()->back();
+//        $dataProduct = Product::query()->where('id', $product->id)->first();
+//        $dataProduct->stock = $dataProduct->stock - 1;
+//        $dataProduct->save();
+
+        return redirect()->route('carts.index', $number);
     }
     public function destroy($id)
     {
@@ -75,6 +80,9 @@ class CartController extends Controller
         $cart->quantity = $cart->quantity + 1;
 
         if($cart->save()){
+//            $product->stock = $product->stock - 1;
+//            $product->save();
+
             return redirect()->back();
         }
     }
@@ -90,6 +98,9 @@ class CartController extends Controller
         $cart->quantity = $cart->quantity - 1;
 
         if($cart->save()){
+//            $product->stock = $product->stock + 1;
+//            $product->save();
+
             if($cart->quantity == 0){
                 $cart->delete();
             }

@@ -16,7 +16,6 @@ export default function Home(props) {
 
     return (
         <MainLayout>
-            <Toastfy/>
             <Head title="Menu"/>
             <GuestNavbar table={numberTable}/>
             <div className="py-20">

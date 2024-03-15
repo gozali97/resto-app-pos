@@ -28,6 +28,9 @@ class DashboardController extends Controller
                 'path_image',
                 'category_id'
             )
+            ->where('stock', '>', 0)
+            ->where('status', 1)
+            ->latest()
             ->paginate(12)
             ->withQueryString();
 

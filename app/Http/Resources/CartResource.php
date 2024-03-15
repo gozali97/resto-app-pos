@@ -17,6 +17,7 @@ class CartResource extends JsonResource
         return [
             'id' => $this->id,
             'price' => $price = $this->price,
+            'product_id' => $this->product_id,
             'quantity' => $this->quantity,
             'price_tax' => (int) round((11/100) * $price, 0) + $price,
             'product' => [

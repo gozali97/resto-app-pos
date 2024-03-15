@@ -1,5 +1,5 @@
 import {Link, Head, router} from '@inertiajs/react';
-import React from "react";
+import React, {useState} from "react";
 import MainLayout from "@/Layouts/MainLayout.jsx";
 import GuestNavbar from "@/Components/GuestNavbar.jsx";
 import {numberFormat} from "@/Libs/Helpers.jsx";
@@ -22,6 +22,7 @@ import {
     TabsHeader,
     Typography
 } from "@material-tailwind/react";
+
 export default function Index(props) {
     const numberTable = props.numberTable;
     const carts = props.carts;
@@ -59,13 +60,58 @@ export default function Index(props) {
     let ppn = (11 / 100) * carts.reduce((acc, cart) => acc + cart.price, 0);
     let total = carts.reduce((acc, cart) => acc + cart.price_tax, 0);
 
-    const [type, setType] = React.useState("cash");
-    const [cardNumber, setCardNumber] = React.useState("");
-    const [cardExpires, setCardExpires] = React.useState("");
-    const [paymentValue, setpaymentValue] = React.useState("");
+    const [data, setData] = useState({
+        table_id: numberTable,
+        type: "cash",
+        costumer_name: "",
+        card_number: "",
+        card_name: "",
+        card_cvc: "",
+        card_expired: "",
+        gross_amount: "",
+        payment_value: "",
+        change_value: "",
+        cart: [],
+    });
 
-    const isPaymentValueSufficient = parseFloat(paymentValue) >= total;
-    const changeValue = paymentValue ? parseFloat(paymentValue) - total : 0;
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+
+        if (name === 'payment_value') {
+            const parsedPaymentValue = parseFloat(value);
+            const newChangeValue = parsedPaymentValue >= total ? parsedPaymentValue - total : 0;
+            setData((prevData) => ({
+                ...prevData,
+                change_value: newChangeValue,
+            }));
+        }
+    };
+
+    const isPaymentValueSufficient = parseFloat(data.payment_value) >= total;
+
+    function submit(e) {
+        e.preventDefault()
+
+        router.post(route('transaction.store'), {
+            ...data,
+            cart: carts,
+            gross_amount:total,
+        }, {
+            onSuccess: () => {
+                toast.success("Transaction successfully!");
+
+            },
+                onError: (errors) => {
+                    let errorMessage = Object.values(errors).join('<br>');
+                    let alertMessage = `${errorMessage}`;
+                    toast.error(alertMessage);
+                }
+        })
+    }
 
 
     return (<MainLayout>
@@ -85,7 +131,7 @@ export default function Index(props) {
                                             <Table.Th>#</Table.Th>
                                             <Table.Th>Name</Table.Th>
                                             <Table.Th>Category</Table.Th>
-                                            <Table.Th>Quantity</Table.Th>
+                                            <Table.Th className={`text-center`}>Quantity</Table.Th>
                                             <Table.Th className="text-right">Price</Table.Th>
                                             <Table.Th></Table.Th>
                                         </tr>
@@ -105,19 +151,23 @@ export default function Index(props) {
                                                 <Table.Td
                                                     className="text-start">
                                                     <div className="flex items-center">
-                                                        <button onClick={() => reduceProduct(cart.id)} className="border rounded-md py-2 font-bold px-4 mr-2 text-white bg-red-500 hover:bg-red-600">-</button>
+                                                        <button onClick={() => reduceProduct(cart.id)}
+                                                                className="border rounded-md py-2 font-bold px-4 mr-2 text-gray-900 bg-gray-50 hover:bg-gray-200">-
+                                                        </button>
                                                         <span className="text-center w-8">{cart.quantity}</span>
-                                                        <button onClick={() => addProduct(cart.id)} className="border rounded-md py-2 font-bold px-4 ml-2 text-white bg-green-500 hover:bg-green-600">+</button>
+                                                        <button onClick={() => addProduct(cart.id)}
+                                                                className="border rounded-md py-2 font-bold px-4 ml-2 text-gray-900 bg-gray-50 hover:bg-gray-200">+
+                                                        </button>
                                                     </div>
                                                 </Table.Td>
                                                 <Table.Td
                                                     className="text-right">Rp. {numberFormat(cart.price)}
                                                 </Table.Td>
                                                 <Table.Td className="text-right">
-                                                <Button onClick={() => onDeleteHandler(cart.id)}
+                                                    <Button onClick={() => onDeleteHandler(cart.id)}
                                                             className="focus:outline-none inline">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewB
-                                                             ox="0 0 24 24"
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                             viewBox="0 0 24 24"
                                                              strokeWidth={1.5} stroke="currentColor"
                                                              className="w-6 h-6 text-red-600">
                                                             <path strokeLinecap="round" strokeLinejoin="round"
@@ -172,17 +222,25 @@ export default function Index(props) {
                                 className="m-0 grid place-items-center px-4 py-6 text-center"
                             >
                                 <Typography variant="h5" color="white">
-                                    {type === "card" ? "Pay with Card" : "Pay with Cash"}
+                                    {data.type === "card" ? "Pay with Card" : "Pay with Cash"}
                                 </Typography>
                             </CardHeader>
                             <CardBody>
-                                <form action="">
-                                    <Tabs value={type} className="overflow-visible">
+                                <form onSubmit={submit}>
+                                    <Tabs value={data.type} className="overflow-visible">
                                         <TabsHeader className="relative z-0 ">
-                                            <Tab value="cash" onClick={() => setType("cash")}>
+                                            <Tab
+                                                value="cash"
+                                                onClick={() => setData({...data, type: 'cash'})}
+                                                active={data.type === 'cash'}
+                                            >
                                                 Pay with Cash
                                             </Tab>
-                                            <Tab value="card" onClick={() => setType("card")}>
+                                            <Tab
+                                                value="card"
+                                                onClick={() => setData({...data, type: 'card'})}
+                                                active={data.type === 'card'}
+                                            >
                                                 Pay with Card
                                             </Tab>
                                         </TabsHeader>
@@ -190,18 +248,39 @@ export default function Index(props) {
                                             className="!overflow-x-hidden !overflow-y-visible"
                                             animate={{
                                                 initial: {
-                                                    x: type === "card" ? 400 : -400,
+                                                    x: data.type === "card" ? 400 : -400,
                                                 },
                                                 mount: {
                                                     x: 0,
                                                 },
                                                 unmount: {
-                                                    x: type === "card" ? 400 : -400,
+                                                    x: data.type === "card" ? 400 : -400,
                                                 },
                                             }}
                                         >
                                             <TabPanel value="card" className="p-0">
                                                 <div className="mt-12 flex flex-col gap-4">
+                                                    <div className="my-1">
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mb-2 font-medium "
+                                                        >
+                                                            Costumer Name
+                                                        </Typography>
+
+                                                        <Input
+                                                            maxLength={19}
+                                                            value={data.costumer_name}
+                                                            onChange={handleChange}
+                                                            name="costumer_name"
+                                                            placeholder="Costumer Name"
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                        />
+                                                    </div>
                                                     <div className="my-3">
                                                         <Typography
                                                             variant="small"
@@ -213,8 +292,9 @@ export default function Index(props) {
 
                                                         <Input
                                                             maxLength={19}
-                                                            value={cardNumber}
-                                                            onChange={(event) => setCardNumber(event.target.value)}
+                                                            value={data.card_number}
+                                                            name="card_number"
+                                                            onChange={handleChange}
                                                             icon={
                                                                 <CreditCardIcon
                                                                     className="absolute left-0 h-4 w-4 text-blue-gray-300"/>
@@ -236,8 +316,9 @@ export default function Index(props) {
                                                                 </Typography>
                                                                 <Input
                                                                     maxLength={5}
-                                                                    value={cardExpires}
-                                                                    onChange={(event) => setCardExpires(event.target.value)}
+                                                                    value={data.card_expired}
+                                                                    onChange={handleChange}
+                                                                    name="card_expired"
                                                                     containerProps={{className: "min-w-[72px]"}}
                                                                     placeholder="00/00"
                                                                     className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -258,6 +339,9 @@ export default function Index(props) {
                                                                     maxLength={4}
                                                                     containerProps={{className: "min-w-[72px]"}}
                                                                     placeholder="000"
+                                                                    name="card_cvc"
+                                                                    value={data.card_cvc}
+                                                                    onChange={handleChange}
                                                                     className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                                     labelProps={{
                                                                         className: "before:content-none after:content-none",
@@ -274,6 +358,9 @@ export default function Index(props) {
                                                         </Typography>
                                                         <Input
                                                             placeholder="name@mail.com"
+                                                            value={data.card_name}
+                                                            onChange={handleChange}
+                                                            name="card_name"
                                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                             labelProps={{
                                                                 className: "before:content-none after:content-none",
@@ -291,15 +378,17 @@ export default function Index(props) {
                                                         <Input
                                                             type="text"
                                                             placeholder="Rp.0"
-                                                            value={paymentValue}
-                                                            onChange={(event) => setpaymentValue(event.target.value)}
+                                                            value={data.payment_value}
+                                                            name="payment_value"
+                                                            onChange={handleChange}
                                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                             labelProps={{
                                                                 className: "before:content-none after:content-none",
                                                             }}
                                                         />
                                                     </div>
-                                                    <Button size="lg" disabled={!isPaymentValueSufficient} className={`text-white ${isPaymentValueSufficient ? 'bg-blue-600 hover:bg-blue-700':'bg-red-500'}`}>
+                                                    <Button type="submit" size="lg" disabled={!isPaymentValueSufficient}
+                                                            className={`text-white ${isPaymentValueSufficient ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red-500'}`}>
                                                         Pay Now
                                                     </Button>
                                                     <Typography
@@ -314,6 +403,27 @@ export default function Index(props) {
                                             </TabPanel>
                                             <TabPanel value="cash" className="p-0">
                                                 <div className="mt-12 flex flex-col gap-4">
+                                                    <div className="">
+                                                        <Typography
+                                                            variant="small"
+                                                            color="blue-gray"
+                                                            className="mb-2 font-medium "
+                                                        >
+                                                            Costumer Name
+                                                        </Typography>
+
+                                                        <Input
+                                                            maxLength={19}
+                                                            value={data.costumer_name}
+                                                            onChange={handleChange}
+                                                            name="costumer_name"
+                                                            placeholder="Costumer Name"
+                                                            className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                            labelProps={{
+                                                                className: "before:content-none after:content-none",
+                                                            }}
+                                                        />
+                                                    </div>
                                                     <div>
                                                         <Typography
                                                             variant="small"
@@ -325,8 +435,9 @@ export default function Index(props) {
                                                         <Input
                                                             type="text"
                                                             placeholder="Rp.0"
-                                                            value={paymentValue}
-                                                            onChange={(event) => setpaymentValue(event.target.value)}
+                                                            value={data.payment_value}
+                                                            name="payment_value"
+                                                            onChange={handleChange}
                                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                             labelProps={{
                                                                 className: "before:content-none after:content-none",
@@ -343,16 +454,18 @@ export default function Index(props) {
                                                         </Typography>
                                                         <Input
                                                             placeholder="Rp.0"
-                                                            value={changeValue}
+                                                            value={data.change_value}
+                                                            name="change_value"
                                                             disabled
                                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                             labelProps={{
                                                                 className: "before:content-none after:content-none",
                                                             }}
-                                                            containerProps={{ className: "mt-4" }}
+                                                            containerProps={{className: "mt-4"}}
                                                         />
                                                     </div>
-                                                    <Button size="lg" disabled={!isPaymentValueSufficient} className={`text-white ${isPaymentValueSufficient ? 'bg-blue-600 hover:bg-blue-700':'bg-red-500'}`}>
+                                                    <Button size="lg" type="submit" disabled={!isPaymentValueSufficient}
+                                                            className={`text-white ${isPaymentValueSufficient ? 'bg-blue-600 hover:bg-blue-700' : 'bg-red-500'}`}>
                                                         Pay Now
                                                     </Button>
                                                     <Typography
