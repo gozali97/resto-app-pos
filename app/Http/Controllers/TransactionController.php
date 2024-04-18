@@ -52,6 +52,7 @@ class TransactionController extends Controller
 
         $transaction = new Transaction;
         $transaction->no_table = $table->number;
+        $transaction->costumer_name = $request->costumer_name;
         $transaction->order_id = $order_id;
         $transaction->gross_amount = $request->gross_amount;
         $transaction->change_amount = $request->change_value;

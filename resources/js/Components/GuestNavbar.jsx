@@ -64,39 +64,42 @@ export function GuestNavbar({table}) {
     }, []);
 
     return (
-        <Navbar className="fixed z-50 mx-auto lg:mx-4 max-w-screen-2xl p-2 lg:rounded-full lg:px-4">
-            <div className="flex lg:items-center gap-4 text-gray-900 justify-between">
-                <Typography
-                    as="a"
-                    href="#"
-                    className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
-                >
-                    Genial POS
-                </Typography>
-                <div className="relative lg:mx-auto flex items-center justify-center text-blue-gray-900">
-                    <div className="hidden lg:flex">
-                        <NavList numberTable={table}/>
+        <div className="flex w-full justify-center items-center px-1 py-8">
+            <Navbar className="fixed z-50 mx-auto lg:mx-6 max-w-screen-2xl xl:max-w-screen-2xl p-2 lg:rounded-full lg:px-4">
+                <div className="flex lg:items-center gap-4 text-gray-900 justify-between">
+                    <Typography
+                        as="a"
+                        href="#"
+                        className="mr-4 ml-2 cursor-pointer py-1.5 font-medium"
+                    >
+                        Genial POS
+                    </Typography>
+                    <div className="relative lg:mx-auto flex items-center justify-center text-blue-gray-900">
+                        <div className="hidden lg:flex">
+                            <NavList numberTable={table}/>
+                        </div>
+
+                        {/*<ProfileMenu />*/}
+                    </div>
+                    <div className="flex">
+                        <IconButton
+                            size="sm"
+                            color="blue-gray"
+                            variant="text"
+                            onClick={toggleIsNavOpen}
+                            className="ml-auto float-end mr-2 lg:hidden"
+                        >
+                            <Bars3Icon className="h-6 w-6"/>
+                        </IconButton>
                     </div>
 
-                    {/*<ProfileMenu />*/}
                 </div>
-                <div className="flex">
-                    <IconButton
-                        size="sm"
-                        color="blue-gray"
-                        variant="text"
-                        onClick={toggleIsNavOpen}
-                        className="ml-auto float-end mr-2 lg:hidden"
-                    >
-                        <Bars3Icon className="h-6 w-6"/>
-                    </IconButton>
-                </div>
+                <MobileNav open={isNavOpen} className="overflow-scroll">
+                    <NavList numberTable={table}/>
+                </MobileNav>
+            </Navbar>
+        </div>
 
-            </div>
-            <MobileNav open={isNavOpen} className="overflow-scroll">
-                <NavList numberTable={table}/>
-            </MobileNav>
-        </Navbar>
     );
 }
 

@@ -40,7 +40,7 @@ export default function Home(props) {
                 </div>
                 <div className="flex flex-col w-full py-4 justify-center">
                     {products.length ? (
-                        <div className="grid px-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <div className="grid px-10 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                             {products.map((product) => (
                                 <ProductItem table={numberTable} product={product} key={product.id}/>
                             ))}

@@ -26,7 +26,15 @@ class TransactionResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\Card::make()
+                    ->schema([
+                        Forms\Components\TextInput::make('order_id'),
+                        Forms\Components\TextInput::make('no_table'),
+                        Forms\Components\TextInput::make('costumer_name'),
+                        Forms\Components\TextInput::make('gross_amount'),
+                        Forms\Components\TextInput::make('change_amount'),
+                        Forms\Components\TextInput::make('payment_type'),
+                    ])->columns(2)
             ]);
     }
 
@@ -34,13 +42,25 @@ class TransactionResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('order_id')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('no_table')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('costumer_name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('gross_amount')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('change_amount')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('payment_type')
+                    ->searchable(),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

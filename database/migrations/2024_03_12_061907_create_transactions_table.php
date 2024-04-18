@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('order_id');
-            $table->string('no_table');
+            $table->string('no_table', 10);
+            $table->string('costumer_name');
             $table->double('gross_amount');
             $table->double('change_amount');
             $table->json('payment_info')->nullable();
